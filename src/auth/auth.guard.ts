@@ -1,11 +1,13 @@
 import {
   CanActivate,
   ExecutionContext,
+  HttpStatus,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
+import { GraphQLError } from 'graphql';
 import { jwtConstants } from './constants';
 
 @Injectable()
@@ -16,10 +18,16 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest<Request>();
     const token = this.extractTokenFromHeader(request);
     if (!token) {
-      throw new UnauthorizedException();
+      throw new GraphQLError('UNAUTHORIZED', {
+        extensions: {
+          code: HttpStatus.UNAUTHORIZED,
+        },
+      });
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync<{
+        userId: string;
+      }>(token, {
         secret: jwtConstants.secret,
       });
 
@@ -31,7 +39,7 @@ export class AuthGuard implements CanActivate {
   }
 
   private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    const [type, token] = request?.headers?.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }

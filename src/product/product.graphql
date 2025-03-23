@@ -1,0 +1,64 @@
+type Product {
+  id: ID!
+  name: String!
+  description: String
+  slug: String!
+  productVariants: [ProductVariant]
+  status: String
+  isDeleted: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
+type ProductVariant {
+  id: ID!
+  name: String!
+  sku: String!
+  status: String!
+  attributes: JSON
+  isDeleted: Boolean
+}
+
+input ProductRequest {
+  userId: String!
+  page: Int = 0
+  limit: Int = 10
+  search: String = ""
+  from: String
+  to: String
+}
+
+input CreateProductInput {
+  userId: String!
+  name: String!
+  description: String!
+  categoryId: String!
+  productVariants: [ProductVariantInput!]!
+  status: String!
+}
+
+input ProductVariantInput {
+  name: String!
+  sku: String!
+  status: String!
+  attributes: JSON!
+}
+
+type ProductsResponse {
+  data: [Product!]
+  total: Int!
+  page: Int!
+  limit: Int!
+}
+
+scalar JSON
+
+type Query {
+  getProducts(data: ProductRequest!): ProductsResponse
+}
+
+type Mutation {
+  createProduct(input: CreateProductInput!): Product!
+  updateProduct(id: ID!, input: CreateProductInput!): Product!
+  deleteProduct(slug: String!, userId: String!): Product!
+}
