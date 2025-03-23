@@ -1,13 +1,18 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, Observable } from 'rxjs';
-import { ProductsResponse } from 'src/graphql';
+import {
+  CreateIngredientInput,
+  Ingredient,
+  ProductsResponse,
+} from 'src/graphql';
 
 interface ProductGrpcService {
   getProducts(data: {
     page: number;
     limit: number;
   }): Observable<ProductsResponse>;
+  createIngredient(data: CreateIngredientInput): Observable<Ingredient>;
 }
 
 @Injectable()
@@ -33,5 +38,12 @@ export class ProductService implements OnModuleInit {
     );
     const data = response?.data || [];
     return { data, ...response };
+  }
+
+  async createIngredient(payload: CreateIngredientInput): Promise<Ingredient> {
+    const response = await firstValueFrom(
+      this.productService.createIngredient(payload),
+    );
+    return response;
   }
 }

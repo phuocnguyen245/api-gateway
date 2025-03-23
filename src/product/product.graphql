@@ -19,6 +19,17 @@ type ProductVariant {
   isDeleted: Boolean
 }
 
+type Ingredient {
+  id: ID!
+  name: String!
+  unit: String
+  description: String
+  status: String
+  isDeleted: Boolean
+  createdAt: String
+  updatedAt: String
+}
+
 input ProductRequest {
   userId: String!
   page: Int = 0
@@ -26,6 +37,14 @@ input ProductRequest {
   search: String = ""
   from: String
   to: String
+}
+
+input CreateIngredientInput {
+  userId: String!
+  name: String!
+  description: String!
+  status: String!
+  unit: String!
 }
 
 input CreateProductInput {
@@ -58,6 +77,7 @@ type Query {
 }
 
 type Mutation {
+  createIngredient(input: CreateIngredientInput!): Ingredient!
   createProduct(input: CreateProductInput!): Product!
   updateProduct(id: ID!, input: CreateProductInput!): Product!
   deleteProduct(slug: String!, userId: String!): Product!

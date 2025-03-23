@@ -1,5 +1,9 @@
-import { Args, Query, Resolver } from '@nestjs/graphql';
-import { ProductRequest, ProductsResponse } from '../graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import {
+  CreateIngredientInput,
+  ProductRequest,
+  ProductsResponse,
+} from '../graphql';
 import { ProductService } from './product.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { UseGuards } from '@nestjs/common';
@@ -19,5 +23,11 @@ export class ProductResolver {
       page: 0,
       limit: 10,
     });
+  }
+
+  @Mutation('createIngredient')
+  async createIngredient(@Args('input') data: CreateIngredientInput) {
+    console.log({ data });
+    return this.productService.createIngredient(data);
   }
 }

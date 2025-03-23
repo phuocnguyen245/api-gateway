@@ -17,6 +17,14 @@ export interface ProductRequest {
     to?: Nullable<string>;
 }
 
+export interface CreateIngredientInput {
+    userId: string;
+    name: string;
+    description: string;
+    status: string;
+    unit: string;
+}
+
 export interface CreateProductInput {
     userId: string;
     name: string;
@@ -54,6 +62,17 @@ export interface ProductVariant {
     isDeleted?: Nullable<boolean>;
 }
 
+export interface Ingredient {
+    id: string;
+    name: string;
+    unit?: Nullable<string>;
+    description?: Nullable<string>;
+    status?: Nullable<string>;
+    isDeleted?: Nullable<boolean>;
+    createdAt?: Nullable<string>;
+    updatedAt?: Nullable<string>;
+}
+
 export interface ProductsResponse {
     data?: Nullable<Product[]>;
     total: number;
@@ -67,6 +86,7 @@ export interface IQuery {
 }
 
 export interface IMutation {
+    createIngredient(input: CreateIngredientInput): Ingredient | Promise<Ingredient>;
     createProduct(input: CreateProductInput): Product | Promise<Product>;
     updateProduct(id: string, input: CreateProductInput): Product | Promise<Product>;
     deleteProduct(slug: string, userId: string): Product | Promise<Product>;
