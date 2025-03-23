@@ -5,7 +5,25 @@ type User {
 }
 
 type AuthResponse {
+  id: String!
+  name: String!
+  email: String
+  role: String!
   access_token: String!
+  refresh_token: String!
+}
+
+input RegisterInput {
+  username: String!
+  password: String!
+  email: String!
+  name: String!
+  role: String
+}
+
+input ChangePasswordInput {
+  oldPassword: String!
+  newPassword: String!
 }
 
 type Query {
@@ -14,4 +32,7 @@ type Query {
 
 type Mutation {
   login(username: String!, password: String!): AuthResponse
+  register(input: RegisterInput!): AuthResponse
+  forgotPassword(id: ID!, password: String!): User
+  changePassword(id: ID!, input: ChangePasswordInput!): User
 }

@@ -20,10 +20,4 @@ export class UserService implements OnModuleInit {
   async getUser(id: string) {
     return await firstValueFrom(await this.userService.getUser({ id }));
   }
-
-  async login(username: string, password: string) {
-    return await firstValueFrom(
-      await this.userService.login({ username, password }),
-    );
-  }
 }

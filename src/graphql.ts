@@ -41,6 +41,19 @@ export interface ProductVariantInput {
     attributes: JSON;
 }
 
+export interface RegisterInput {
+    username: string;
+    password: string;
+    email: string;
+    name: string;
+    role?: Nullable<string>;
+}
+
+export interface ChangePasswordInput {
+    oldPassword: string;
+    newPassword: string;
+}
+
 export interface Product {
     id: string;
     name: string;
@@ -91,6 +104,9 @@ export interface IMutation {
     updateProduct(id: string, input: CreateProductInput): Product | Promise<Product>;
     deleteProduct(slug: string, userId: string): Product | Promise<Product>;
     login(username: string, password: string): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
+    register(input: RegisterInput): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
+    forgotPassword(id: string, password: string): Nullable<User> | Promise<Nullable<User>>;
+    changePassword(id: string, input: ChangePasswordInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface User {
@@ -100,7 +116,12 @@ export interface User {
 }
 
 export interface AuthResponse {
+    id: string;
+    name: string;
+    email?: Nullable<string>;
+    role: string;
     access_token: string;
+    refresh_token: string;
 }
 
 export type JSON = any;
