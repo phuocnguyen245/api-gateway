@@ -95,7 +95,7 @@ export interface ProductsResponse {
 
 export interface IQuery {
     getProducts(data: ProductRequest): Nullable<ProductsResponse> | Promise<Nullable<ProductsResponse>>;
-    getUser(id: string): Nullable<User> | Promise<Nullable<User>>;
+    getUser(id?: Nullable<string>): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface IMutation {
@@ -105,14 +105,15 @@ export interface IMutation {
     deleteProduct(slug: string, userId: string): Product | Promise<Product>;
     login(username: string, password: string): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
     register(input: RegisterInput): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
-    forgotPassword(id: string, password: string): Nullable<User> | Promise<Nullable<User>>;
-    changePassword(id: string, input: ChangePasswordInput): Nullable<User> | Promise<Nullable<User>>;
+    forgotPassword(password: string): Nullable<User> | Promise<Nullable<User>>;
+    changePassword(input: ChangePasswordInput): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface User {
     id: string;
     name: string;
     email: string;
+    role: string;
 }
 
 export interface AuthResponse {

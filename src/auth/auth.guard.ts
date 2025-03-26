@@ -3,20 +3,25 @@ import {
   ExecutionContext,
   HttpStatus,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 import { GraphQLError } from 'graphql';
 import { jwtConstants } from './constants';
+import { GqlExecutionContext } from '@nestjs/graphql';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const token = this.extractTokenFromHeader(request);
+    // Tạo GqlExecutionContext từ ExecutionContext
+    const ctx = GqlExecutionContext.create(context);
+
+    const req = ctx.getContext<{ req: Request }>().req;
+
+    // Lấy token từ header Authorization
+    const token = this.extractTokenFromHeader(req);
     if (!token) {
       throw new GraphQLError('UNAUTHORIZED', {
         extensions: {
@@ -24,6 +29,7 @@ export class AuthGuard implements CanActivate {
         },
       });
     }
+
     try {
       const payload = await this.jwtService.verifyAsync<{
         userId: string;
@@ -31,15 +37,21 @@ export class AuthGuard implements CanActivate {
         secret: jwtConstants.secret,
       });
 
-      request['user'] = payload;
-    } catch {
-      throw new UnauthorizedException();
+      req['user'] = payload;
+    } catch (error) {
+      console.log(error);
+      throw new GraphQLError('UNAUTHORIZED', {
+        extensions: {
+          code: HttpStatus.UNAUTHORIZED,
+        },
+      });
     }
+
     return true;
   }
 
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [type, token] = request?.headers?.authorization?.split(' ') ?? [];
+  private extractTokenFromHeader(req: Request): string | undefined {
+    const [type, token] = req.headers.authorization?.split(' ') ?? [];
     return type === 'Bearer' ? token : undefined;
   }
 }

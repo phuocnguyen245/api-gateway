@@ -2,6 +2,7 @@ type User {
   id: ID!
   name: String!
   email: String!
+  role: String!
 }
 
 type AuthResponse {
@@ -27,12 +28,12 @@ input ChangePasswordInput {
 }
 
 type Query {
-  getUser(id: ID!): User
+  getUser(id: ID): User
 }
 
 type Mutation {
   login(username: String!, password: String!): AuthResponse
   register(input: RegisterInput!): AuthResponse
-  forgotPassword(id: ID!, password: String!): User
-  changePassword(id: ID!, input: ChangePasswordInput!): User
+  forgotPassword(password: String!): User
+  changePassword(input: ChangePasswordInput!): User
 }

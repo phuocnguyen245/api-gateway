@@ -4,7 +4,7 @@ import { AppModule } from './app.module';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  await app.listen(3000);
-  console.log('🚀 API Gateway is running on port 3000');
+  await app.listen(8000);
+  console.log('🚀 API Gateway is running on port 8000');
 }
 bootstrap();
