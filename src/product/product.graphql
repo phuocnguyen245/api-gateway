@@ -31,7 +31,7 @@ type Ingredient {
 }
 
 input ProductRequest {
-  userId: String!
+  userId: String
   page: Int = 0
   limit: Int = 10
   search: String = ""
@@ -39,7 +39,7 @@ input ProductRequest {
   to: String
 }
 
-input CreateIngredientInput {
+input CreateIngredientBody {
   userId: String!
   name: String!
   description: String!
@@ -47,16 +47,16 @@ input CreateIngredientInput {
   unit: String!
 }
 
-input CreateProductInput {
+input CreateProductBody {
   userId: String!
   name: String!
   description: String!
   categoryId: String!
-  productVariants: [ProductVariantInput!]!
+  productVariants: [ProductVariantBody!]!
   status: String!
 }
 
-input ProductVariantInput {
+input ProductVariantBody {
   name: String!
   sku: String!
   status: String!
@@ -73,12 +73,13 @@ type ProductsResponse {
 scalar JSON
 
 type Query {
-  getProducts(data: ProductRequest!): ProductsResponse
+  getProducts(params: ProductRequest!): ProductsResponse
+  getProduct(slug: String!): Product
 }
 
 type Mutation {
-  createIngredient(input: CreateIngredientInput!): Ingredient!
-  createProduct(input: CreateProductInput!): Product!
-  updateProduct(id: ID!, input: CreateProductInput!): Product!
+  createIngredient(body: CreateIngredientBody!): Ingredient!
+  createProduct(body: CreateProductBody!): Product!
+  updateProduct(id: ID!, body: CreateProductBody!): Product!
   deleteProduct(slug: String!, userId: String!): Product!
 }

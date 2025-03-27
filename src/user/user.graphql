@@ -14,7 +14,7 @@ type AuthResponse {
   refresh_token: String!
 }
 
-input RegisterInput {
+input RegisterBody {
   username: String!
   password: String!
   email: String!
@@ -22,7 +22,7 @@ input RegisterInput {
   role: String
 }
 
-input ChangePasswordInput {
+input ChangePasswordBody {
   oldPassword: String!
   newPassword: String!
 }
@@ -33,7 +33,7 @@ type Query {
 
 type Mutation {
   login(username: String!, password: String!): AuthResponse
-  register(input: RegisterInput!): AuthResponse
+  register(body: RegisterBody!): AuthResponse
   forgotPassword(password: String!): User
-  changePassword(input: ChangePasswordInput!): User
+  changePassword(body: ChangePasswordBody!): User
 }

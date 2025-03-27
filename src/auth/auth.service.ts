@@ -1,11 +1,11 @@
 import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { ClientGrpc } from '@nestjs/microservices';
 import { firstValueFrom, Observable } from 'rxjs';
-import { AuthResponse, RegisterInput, User } from 'src/graphql';
+import { AuthResponse, RegisterBody, User } from 'src/graphql';
 
 interface AuthServiceClient {
   login(data: { username: string; password: string }): Observable<AuthResponse>;
-  register(data: RegisterInput): Observable<AuthResponse>;
+  register(data: RegisterBody): Observable<AuthResponse>;
   forgotPassword(data: { id: string; password: string }): Observable<User>;
   getUser(data: { id: string }): Observable<User>;
 }
@@ -27,7 +27,7 @@ export class AuthService implements OnModuleInit {
     return await firstValueFrom(this.authService.login(data));
   }
 
-  async register(data: RegisterInput): Promise<AuthResponse> {
+  async register(data: RegisterBody): Promise<AuthResponse> {
     return await firstValueFrom(this.authService.register(data));
   }
 

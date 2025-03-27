@@ -9,7 +9,7 @@
 /* eslint-disable */
 
 export interface ProductRequest {
-    userId: string;
+    userId?: Nullable<string>;
     page?: Nullable<number>;
     limit?: Nullable<number>;
     search?: Nullable<string>;
@@ -17,7 +17,7 @@ export interface ProductRequest {
     to?: Nullable<string>;
 }
 
-export interface CreateIngredientInput {
+export interface CreateIngredientBody {
     userId: string;
     name: string;
     description: string;
@@ -25,23 +25,23 @@ export interface CreateIngredientInput {
     unit: string;
 }
 
-export interface CreateProductInput {
+export interface CreateProductBody {
     userId: string;
     name: string;
     description: string;
     categoryId: string;
-    productVariants: ProductVariantInput[];
+    productVariants: ProductVariantBody[];
     status: string;
 }
 
-export interface ProductVariantInput {
+export interface ProductVariantBody {
     name: string;
     sku: string;
     status: string;
     attributes: JSON;
 }
 
-export interface RegisterInput {
+export interface RegisterBody {
     username: string;
     password: string;
     email: string;
@@ -49,7 +49,7 @@ export interface RegisterInput {
     role?: Nullable<string>;
 }
 
-export interface ChangePasswordInput {
+export interface ChangePasswordBody {
     oldPassword: string;
     newPassword: string;
 }
@@ -94,19 +94,20 @@ export interface ProductsResponse {
 }
 
 export interface IQuery {
-    getProducts(data: ProductRequest): Nullable<ProductsResponse> | Promise<Nullable<ProductsResponse>>;
+    getProducts(params: ProductRequest): Nullable<ProductsResponse> | Promise<Nullable<ProductsResponse>>;
+    getProduct(slug: string): Nullable<Product> | Promise<Nullable<Product>>;
     getUser(id?: Nullable<string>): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface IMutation {
-    createIngredient(input: CreateIngredientInput): Ingredient | Promise<Ingredient>;
-    createProduct(input: CreateProductInput): Product | Promise<Product>;
-    updateProduct(id: string, input: CreateProductInput): Product | Promise<Product>;
+    createIngredient(body: CreateIngredientBody): Ingredient | Promise<Ingredient>;
+    createProduct(body: CreateProductBody): Product | Promise<Product>;
+    updateProduct(id: string, body: CreateProductBody): Product | Promise<Product>;
     deleteProduct(slug: string, userId: string): Product | Promise<Product>;
     login(username: string, password: string): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
-    register(input: RegisterInput): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
+    register(body: RegisterBody): Nullable<AuthResponse> | Promise<Nullable<AuthResponse>>;
     forgotPassword(password: string): Nullable<User> | Promise<Nullable<User>>;
-    changePassword(input: ChangePasswordInput): Nullable<User> | Promise<Nullable<User>>;
+    changePassword(body: ChangePasswordBody): Nullable<User> | Promise<Nullable<User>>;
 }
 
 export interface User {

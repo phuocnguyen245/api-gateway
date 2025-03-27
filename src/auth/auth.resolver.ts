@@ -5,8 +5,8 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthService } from 'src/auth/auth.service';
 import {
   AuthResponse,
-  ChangePasswordInput,
-  RegisterInput,
+  ChangePasswordBody,
+  RegisterBody,
   User,
 } from 'src/graphql';
 import { RequestWithUser } from 'src/type';
@@ -15,8 +15,8 @@ import { AuthGuard } from './auth.guard';
 @Resolver('Auth')
 export class AuthResolver {
   constructor(
-    private readonly authService: AuthService,
-    private readonly configService: ConfigService,
+    private authService: AuthService,
+    private configService: ConfigService,
     private jwt: JwtService,
   ) {}
 
@@ -39,8 +39,8 @@ export class AuthResolver {
   }
 
   @Mutation()
-  async register(@Args('input') input: RegisterInput): Promise<AuthResponse> {
-    const response = await this.authService.register(input);
+  async register(@Args('body') body: RegisterBody): Promise<AuthResponse> {
+    const response = await this.authService.register(body);
     const accessToken = await this.jwt.signAsync(response);
     const refreshToken = await this.jwt.signAsync(response, {
       secret: this.configService.get('token.refreshSecret'),
@@ -80,9 +80,9 @@ export class AuthResolver {
   @Mutation()
   async changePassword(
     @Context('req') req: RequestWithUser,
-    @Args('input') input: ChangePasswordInput,
+    @Args('body') body: ChangePasswordBody,
   ): Promise<User> {
     const { id } = req.user;
-    return this.authService.forgotPassword({ id, password: input.newPassword });
+    return this.authService.forgotPassword({ id, password: body.newPassword });
   }
 }

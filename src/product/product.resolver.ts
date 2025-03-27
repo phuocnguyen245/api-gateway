@@ -1,6 +1,6 @@
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import {
-  CreateIngredientInput,
+  CreateIngredientBody,
   ProductRequest,
   ProductsResponse,
 } from '../graphql';
@@ -15,18 +15,13 @@ export class ProductResolver {
   @UseGuards(AuthGuard)
   @Query('getProducts')
   async getProducts(
-    @Args('data') data: ProductRequest,
+    @Args('params') params: ProductRequest,
   ): Promise<ProductsResponse> {
-    console.log(data);
-
-    return this.productService.getProducts({
-      page: 0,
-      limit: 10,
-    });
+    return this.productService.getProducts(params);
   }
 
   @Mutation('createIngredient')
-  async createIngredient(@Args('input') data: CreateIngredientInput) {
+  async createIngredient(@Args('body') data: CreateIngredientBody) {
     console.log({ data });
     return this.productService.createIngredient(data);
   }
