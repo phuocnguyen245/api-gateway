@@ -9,6 +9,10 @@ import {
 } from 'src/graphql';
 
 interface ProductGrpcService {
+  getCategories(params: ProductRequest): Observable<ProductsResponse>;
+  getCategoryBySlug(slug: string): Observable<ProductsResponse>;
+  createCategories(body: ProductRequest): Observable<ProductsResponse>;
+
   getProducts(params: ProductRequest): Observable<ProductsResponse>;
   createIngredient(data: CreateIngredientBody): Observable<Ingredient>;
 }
@@ -22,6 +26,21 @@ export class ProductService implements OnModuleInit {
   onModuleInit() {
     this.productService =
       this.client.getService<ProductGrpcService>('ProductService');
+  }
+
+  async getCategories(params: ProductRequest): Promise<ProductsResponse> {
+    const response = await firstValueFrom(
+      this.productService.getProducts(params),
+    );
+    const data = response?.data || [];
+    return { data, ...response };
+  }
+  async getCategoryById(slug: string): Promise<ProductsResponse> {
+    const response = await firstValueFrom(
+      this.productService.getProducts({ slug }),
+    );
+    const data = response?.data || [];
+    return { data, ...response };
   }
 
   async getProducts(params: ProductRequest): Promise<ProductsResponse> {

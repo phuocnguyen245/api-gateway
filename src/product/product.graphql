@@ -54,6 +54,13 @@ input CreateProductBody {
   categoryId: String!
   productVariants: [ProductVariantBody!]!
   status: String!
+  quantity: Int!
+  ingredients: [String!]!
+  unit: String!
+  price: Float!
+  sku: String!
+  image: String
+  tags: [String!]
 }
 
 input ProductVariantBody {

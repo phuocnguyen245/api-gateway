@@ -13,6 +13,14 @@ export class ProductResolver {
   constructor(private readonly productService: ProductService) {}
 
   @UseGuards(AuthGuard)
+  @Query('getCategories')
+  async getCategories(
+    @Args('params') params: ProductRequest,
+  ): Promise<ProductsResponse> {
+    return await this.productService.getCategories(params);
+  }
+
+  @UseGuards(AuthGuard)
   @Query('getProducts')
   async getProducts(
     @Args('params') params: ProductRequest,

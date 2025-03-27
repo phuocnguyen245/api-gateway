@@ -32,6 +32,13 @@ export interface CreateProductBody {
     categoryId: string;
     productVariants: ProductVariantBody[];
     status: string;
+    quantity: number;
+    ingredients: string[];
+    unit: string;
+    price: number;
+    sku: string;
+    image?: Nullable<string>;
+    tags?: Nullable<string[]>;
 }
 
 export interface ProductVariantBody {
